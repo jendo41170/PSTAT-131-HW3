@@ -134,10 +134,11 @@ cor_titanic_train <- titanic_train %>%
   # create a visualization of the matrix 
 rplot(cor_titanic_train)
 ```
-Create a heatmap-style correlation plot for better interpretation (as this includes numbers): 
+
+Also create a heatmap-style correlation plot for better interpretation (as this includes numbers): 
 
 ```{r}
-# Create a heatmap-style correlation plot that can allow for better reading 
+# Create a heatmap-style correlation plot that can allow for better interpretation 
 cor_titanic_train %>%
   stretch() %>%
   ggplot(aes(x, y, fill = r)) +
@@ -150,6 +151,8 @@ cor_titanic_train %>%
 
 * There a is negative correlation (-0.31) between age and sib_sp (# of siblings / spouses aboard the Titanic)
 * There a is negative correlation (-0.21) between parch (# of parents / children aboard the Titanic) and age. 
+
+Note: There was also some negligible correlations (very light in color on the correlation matrix, had a value very close to 0 in the heatmap-style correlation plot). 
 
 ### Question 4
 
@@ -318,7 +321,7 @@ model_accuracies
 
 Which model achieved the highest accuracy on the training data?
 
-Answer(Question 9): The logistic regression model for classification using the `"glm"` engine yields the highest accuracy on the training data (Log Reg Acc = 0.8160112). 
+Answer(Question 9): The logistic regression model for classification using the "glm" engine acieved the highest accuracy on the training data (Log Reg Acc = 0.8160112). 
 
 ### Question 10
 
@@ -332,6 +335,9 @@ augment(log_fit_titanic, new_data = titanic_test) %>%
 Answer(Question 10): Since the logistic regression model preformed the best (yielded the highest training accuracy on the training data), we'll go ahead and fit it to the testing data. The accuracy of the model on the testing data is 0.8156425. 
 
 Again using the **testing** data, create a confusion matrix and visualize it. Plot an ROC curve and calculate the area under it (AUC).
+
+Create a confusion matrix and visualize it: 
+
 ```{r}
 # First we use augment to attach the predicted values to the data, 
 # then generate a confusion matrix
@@ -340,7 +346,8 @@ augment(log_fit_titanic, new_data = titanic_test) %>%
   # visualize 
   autoplot(type = "heatmap")
 ```
-Answer(Question 10): Plot of the ROC Curve: 
+
+Plot of the ROC Curve: 
 
 ```{r}
 # Plot an ROC curve 
@@ -348,6 +355,9 @@ augment(log_fit_titanic, new_data = titanic_test) %>%
   roc_curve(survived, .pred_Yes)%>%
   autoplot()
 ```
+
+Calculate the AUC: 
+
 ```{r}
 # calculate the area under it (AUC)
 store <- augment(log_fit_titanic, new_data = titanic_test)
@@ -358,4 +368,5 @@ Answer(Question 10): After plotting the ROC curve, we find that the area under t
 
 How did the model perform? Compare its training and testing accuracies. If the values differ, why do you think this is so?
 
-Answer(Question 10): The training accuracy was 0.8160112 while the testing accuracy was 0.8156425. Note the values do differ, the training accuracy is slightly higher than the testing accuracy. I think this is the case because we selected the model based on it's accuracy on the training dataset rather than its accuracy on the (unseen) test dataset. 
+Answer(Question 10): The training accuracy was 0.8160112 while the testing accuracy was 0.8156425. Note the values do differ, the training accuracy is slightly higher than the testing accuracy. I think this is the case because we selected the model (logistic regression) based on it's accuracy on the training dataset rather than its accuracy on the (unseen) test dataset. 
+
